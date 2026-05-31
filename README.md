@@ -1,48 +1,84 @@
 # cfai
 # Competitive Resource Allocation Game
 
+# Competitive Resource Allocation Game using Artificial Intelligence Techniques
+
 ## Project Overview
 
-The Competitive Resource Allocation Game is an interactive web-based application developed using Python and Streamlit. The project simulates a scenario where two players compete by allocating limited resources across multiple zones. The objective is to strategically distribute resources to gain control over the maximum number of zones and achieve the highest score.
+The Competitive Resource Allocation Game is an AI-based strategic decision support system developed using Python and Streamlit. The project allows a player to allocate resources among four important sectors: Military, Economy, Technology, and Healthcare. The system evaluates the player's strategy against a computer opponent and provides intelligent analysis using Artificial Intelligence concepts.
 
-## Problem Statement
+## Objectives
 
-In many real-world situations such as business competition, military planning, project management, and budgeting, resources are limited and must be allocated efficiently. This project demonstrates the concept of strategic resource allocation through a simple competitive game.
-
-## How the Game Works
-
-1. Each player is given a maximum of 100 resource units.
-2. Players distribute their resources among three different zones.
-3. For each zone, the player who allocates more resources wins that zone.
-4. The winner of a zone earns one point.
-5. After comparing all zones, the total scores are calculated.
-6. The player with the highest score is declared the winner.
-7. If both players have the same score, the game ends in a tie.
+* To demonstrate the application of Artificial Intelligence concepts in a practical project.
+* To implement search algorithms and intelligent decision-making techniques.
+* To analyze resource allocation strategies using utility and probability-based methods.
+* To provide AI-driven recommendations for improving resource distribution.
 
 ## Features
 
-* Interactive user interface built using Streamlit.
-* Resource allocation across multiple zones.
-* Validation to ensure resource limits are not exceeded.
-* Automatic score calculation.
-* Winner determination based on strategic allocation.
-* Web deployment for easy access through a browser.
+* Resource Allocation using sliders
+* Computer Opponent Strategy
+* Score Calculation and Winner Determination
+* Utility-Based Evaluation
+* Bayesian Probability Analysis
+* Hybrid AI Recommendation System
+* Interactive Streamlit Web Interface
+
+## Course Outcome (CO) Mapping
+
+### CO1 – Intelligent Agents and State Representation
+
+* PEAS Model
+* State Representation using Military, Economy, Technology, and Healthcare sectors
+
+### CO2 – Search Algorithms
+
+* Breadth First Search (BFS)
+* Depth First Search (DFS)
+* Uniform Cost Search (UCS)
+
+### CO3 – Constraint Satisfaction Problem (CSP)
+
+* Validation of resource allocation constraints
+* Total allocation must not exceed available resources
+
+### CO4 – Utility Function
+
+* Evaluation of allocation strategies using utility values
+
+### CO5 – Bayesian Reasoning
+
+* Probability-based analysis using Bayes' Rule
+
+### CO6 – Hybrid AI System
+
+* Combines CSP, Utility Functions, and Bayesian Reasoning
+* Generates intelligent strategy recommendations
 
 ## Technologies Used
 
 * Python
 * Streamlit
-* GitHub
-* Streamlit Community Cloud
+* Data Structures and Algorithms
+* Artificial Intelligence Concepts
+
+## How the Game Works
+
+1. The player allocates resources among Military, Economy, Technology, and Healthcare sectors.
+2. The system validates the allocation using CSP techniques.
+3. The player's allocation is compared with the computer's allocation.
+4. Utility scores are calculated.
+5. Bayesian analysis predicts outcomes.
+6. The Hybrid AI system generates recommendations.
+7. Final scores are displayed and the winner is determined.
 
 ## Applications
 
-* Understanding resource allocation strategies.
-* Learning basic game theory concepts.
-* Demonstrating decision-making under resource constraints.
-* Educational and academic project purposes.
+* Resource Planning
+* Strategic Decision Making
+* AI Education and Demonstration
+* Game Theory Concepts
 
 ## Conclusion
 
-This project provides a simple and practical demonstration of competitive resource allocation. It helps users understand how strategic distribution of limited resources can influence outcomes in competitive environments.
-
+This project demonstrates the practical implementation of Artificial Intelligence concepts including PEAS modeling, search algorithms, constraint satisfaction, utility-based reasoning, Bayesian analysis, and hybrid AI systems. The application provides an interactive platform for understanding AI-driven decision making through a competitive resource allocation game.
