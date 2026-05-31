@@ -1,49 +1,206 @@
 import streamlit as st
+from dataclasses import dataclass
+from collections import deque
+import heapq
 
-st.title("Competitive Resource Allocation Game")
+st.set_page_config(page_title="Competitive Resource Allocation Game", layout="wide")
 
-st.write("Allocate your resources across 3 zones.")
+# CO1
+@dataclass
+class State:
+    military:int
+    economy:int
+    technology:int
+    healthcare:int
 
-total_resources = 100
+class PEAS:
+    performance = "Maximum Score"
+    environment = "Competitive Environment"
+    actuators = "Resource Allocation"
+    sensors = "Opponent Data and Scores"
 
-p1_z1 = st.number_input("Player 1 - Zone 1", 0, total_resources, 0)
-p1_z2 = st.number_input("Player 1 - Zone 2", 0, total_resources, 0)
-p1_z3 = st.number_input("Player 1 - Zone 3", 0, total_resources, 0)
+# CO2
+class SearchAlgorithms:
+    def bfs(self, graph, start):
+        visited = []
+        queue = deque([start])
+        while queue:
+            node = queue.popleft()
+            if node not in visited:
+                visited.append(node)
+                for n in graph[node]:
+                    queue.append(n)
+        return visited
 
-p2_z1 = st.number_input("Player 2 - Zone 1", 0, total_resources, 0)
-p2_z2 = st.number_input("Player 2 - Zone 2", 0, total_resources, 0)
-p2_z3 = st.number_input("Player 2 - Zone 3", 0, total_resources, 0)
+    def dfs(self, graph, start, visited=None):
+        if visited is None:
+            visited = []
+        visited.append(start)
+        for n in graph[start]:
+            if n not in visited:
+                self.dfs(graph, n, visited)
+        return visited
 
-if st.button("Play Game"):
+    def ucs(self, graph, start, goal):
+        pq = [(0, start)]
+        visited = set()
+        while pq:
+            cost, node = heapq.heappop(pq)
+            if node == goal:
+                return cost
+            if node not in visited:
+                visited.add(node)
+                for nbr, wt in graph[node]:
+                    heapq.heappush(pq, (cost + wt, nbr))
+        return None
 
-    p1_total = p1_z1 + p1_z2 + p1_z3
-    p2_total = p2_z1 + p2_z2 + p2_z3
+# CO3
+class CSPValidator:
+    def validate(self, allocations):
+        return sum(allocations.values()) <= 100
 
-    if p1_total > total_resources or p2_total > total_resources:
-        st.error("A player exceeded the resource limit of 100.")
+# CO4
+class UtilityFunction:
+    def calculate(self, allocations):
+        return round(
+            allocations["Military"] * 0.4 +
+            allocations["Economy"] * 0.3 +
+            allocations["Technology"] * 0.2 +
+            allocations["Healthcare"] * 0.1, 2
+        )
+
+# CO5
+class BayesianReasoning:
+    def bayes_rule(self, prior, likelihood, evidence):
+        return round((prior * likelihood) / evidence, 2)
+
+search = SearchAlgorithms()
+csp = CSPValidator()
+utility_fn = UtilityFunction()
+bayes = BayesianReasoning()
+
+st.title("🎯 Competitive Resource Allocation Game")
+st.write("AI Powered Strategic Decision Support System")
+
+st.header("Resource Allocation")
+
+military = st.slider("Military", 0, 100, 25)
+economy = st.slider("Economy", 0, 100, 25)
+technology = st.slider("Technology", 0, 100, 25)
+healthcare = st.slider("Healthcare", 0, 100, 25)
+
+allocations = {
+    "Military": military,
+    "Economy": economy,
+    "Technology": technology,
+    "Healthcare": healthcare
+}
+
+st.write(f"Total Allocation: {sum(allocations.values())}/100")
+
+if st.button("Analyze Strategy"):
+    if not csp.validate(allocations):
+        st.error("Constraint Failed: Total allocation exceeds 100")
     else:
-        p1_score = 0
-        p2_score = 0
+        st.success("CSP Validation Passed")
 
-        zones = [
-            (p1_z1, p2_z1),
-            (p1_z2, p2_z2),
-            (p1_z3, p2_z3)
-        ]
+        state = State(military, economy, technology, healthcare)
 
-        for p1, p2 in zones:
-            if p1 > p2:
-                p1_score += 1
-            elif p2 > p1:
-                p2_score += 1
+        computer = {
+            "Military": 25,
+            "Economy": 25,
+            "Technology": 25,
+            "Healthcare": 25
+        }
 
-        st.subheader("Results")
-        st.write(f"Player 1 Score: {p1_score}")
-        st.write(f"Player 2 Score: {p2_score}")
+        utility_player = utility_fn.calculate(allocations)
+        utility_computer = utility_fn.calculate(computer)
 
-        if p1_score > p2_score:
-            st.success("Player 1 Wins!")
-        elif p2_score > p1_score:
-            st.success("Player 2 Wins!")
+        rows = []
+        player_score = 0
+        computer_score = 0
+
+        for sector in allocations:
+            if allocations[sector] > computer[sector]:
+                winner = "Player"
+                player_score += 10
+            elif allocations[sector] < computer[sector]:
+                winner = "Computer"
+                computer_score += 10
+            else:
+                winner = "Draw"
+
+            rows.append({
+                "Sector": sector,
+                "Player": allocations[sector],
+                "Computer": computer[sector],
+                "Winner": winner
+            })
+
+        st.subheader("Battle Results")
+        st.table(rows)
+
+        c1, c2 = st.columns(2)
+        c1.metric("Player Score", player_score)
+        c2.metric("Computer Score", computer_score)
+
+        st.subheader("CO4 - Utility Function")
+        st.write("Player Utility:", utility_player)
+        st.write("Computer Utility:", utility_computer)
+
+        st.subheader("CO5 - Bayesian Analysis")
+        posterior = bayes.bayes_rule(0.6, 0.7, 0.8)
+        st.write("Posterior Probability:", posterior)
+
+        st.subheader("CO6 - Hybrid AI Recommendation")
+        if utility_player > utility_computer:
+            st.success("Recommended Strategy: Continue Current Allocation")
         else:
-            st.info("It's a Tie!")
+            st.warning("Recommended Strategy: Increase Economy and Technology")
+
+        if player_score > computer_score:
+            st.success("🏆 Player Wins")
+        elif computer_score > player_score:
+            st.error("🤖 Computer Wins")
+        else:
+            st.info("Match Draw")
+
+with st.expander("Advanced AI Features (CO1 & CO2)"):
+    st.subheader("CO1 - PEAS Model")
+    st.write("Performance:", PEAS.performance)
+    st.write("Environment:", PEAS.environment)
+    st.write("Actuators:", PEAS.actuators)
+    st.write("Sensors:", PEAS.sensors)
+
+    st.subheader("State Representation")
+    st.write(State(military, economy, technology, healthcare))
+
+    graph = {
+        "A":["B","C"],
+        "B":["D","E"],
+        "C":["F"],
+        "D":[],"E":[],"F":[]
+    }
+
+    wgraph = {
+        "A":[("B",1),("C",4)],
+        "B":[("D",2)],
+        "C":[("D",1)],
+        "D":[]
+    }
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        if st.button("Run BFS"):
+            st.write(search.bfs(graph, "A"))
+
+    with col2:
+        if st.button("Run DFS"):
+            st.write(search.dfs(graph, "A"))
+
+    with col3:
+        if st.button("Run UCS"):
+            st.write("Minimum Cost:", search.ucs(wgraph, "A", "D"))
+
+         
